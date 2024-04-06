@@ -13,4 +13,5 @@ nbformat
 nbdev
 nbclient
 ipykernel
+jupyter
 Flask
