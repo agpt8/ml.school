@@ -15,3 +15,4 @@ nbclient
 ipykernel
 jupyter
 Flask
+comet-ml
