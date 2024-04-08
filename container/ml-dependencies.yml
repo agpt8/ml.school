@@ -1,10 +1,11 @@
 name: ml-dependencies
 dependencies:
-  - python=3.10
+  - python=3.11
   - numpy
   - pandas
   - scikit-learn
   - tensorflow==2.12.0
   - pip
+  - azure-ai-ml
   - pip:
     - sagemaker-training
