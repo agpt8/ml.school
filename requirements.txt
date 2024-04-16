@@ -16,3 +16,4 @@ ipykernel
 jupyter
 Flask
 comet-ml
+azure-ai-ml
