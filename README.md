@@ -21,6 +21,8 @@ Using IDX will significantly reduce the time needed to set it up on your local c
 
 After opening the project, click on the "Machine Learning School" extension on the left activity bar. This extension will allow you to navigate the documentation, run the pipelines, and deploy the model.
 
+*Note:* IDX requires your browser to have third-party cookies enabled. If IDX gets stuck setting up your workspace, go to your browser settings, enable third-party cookies, and restart the browser.
+
 ## Running the project locally
 
 If you prefer to run the project on your local environment, you can start by 
@@ -28,7 +30,7 @@ If you prefer to run the project on your local environment, you can start by
 
 You can run the code on any Unix-based operating system (e.g., Ubuntu or macOS). If you are using Windows, install the [Windows Subsystem for Linux](https://learn.microsoft.com/en-us/windows/wsl/about) (WSL).
 
-Open the repository using Visual Studio Code and install the ["Machine Learning School"](https://marketplace.visualstudio.com/items?itemName=tideily.mlschool) extension.
+Open the repository using Visual Studio Code and install the ["Machine Learning School"](https://marketplace.visualstudio.com/items?itemName=tideily.mlschool) extension. If you are using WSL, you need to install the extension on the WSL environment.
 
 Once installed, this extension will allow you to navigate the documentation, run the pipelines, and deploy the model directly from Visual Studio Code.
 
