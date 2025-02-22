@@ -24,9 +24,6 @@
             ]
         }
     },
-    "postCreateCommand": {
-        "uv": "curl -LsSf https://astral.sh/uv/install.sh | sh"
-    },
     "features": {
         "ghcr.io/devcontainers/features/docker-outside-of-docker:1": {
             "moby": true,
@@ -36,6 +33,4 @@
             "dockerDashComposeVersion": "none"
         }
     }
-    // Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
-    // "remoteUser": "root"
 }
