@@ -10,7 +10,7 @@ dependencies = [
     "geventhttpclient>=2.3.3",
     "ipykernel>=6.29.5",
     "jupyter>=1.1.1",
-    "keras==3.8.0",
+    "keras==3.9.0",
     "metaflow>=2.13",
     "metaflow-card-html>=1.0.2",
     "mlflow[extras]==2.20.2",
