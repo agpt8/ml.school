@@ -258,7 +258,7 @@
 				"label": "Loading the data",
 				"description": "Loading and preparing the data that will be used by the pipeline to build a model.",
 				"file": "pipelines/common.py",
-				"markdown": ".guide/training-pipeline/dataset.md",
+				"markdown": ".guide/training-pipeline/loading-the-data.md",
 				"actions": [
 					{
 						"label": "Run unit tests",
@@ -271,7 +271,7 @@
 				"label": "Integrating with MLflow",
 				"description": "Integrating the pipeline with MLflow to track the training, evaluation, and registration processes.",
 				"file": "pipelines/training.py",
-				"markdown": ".guide/training-pipeline/mlflow.md",
+				"markdown": ".guide/training-pipeline/integrating-with-mlflow.md",
 				"actions": [
 					{
 						"label": "Open MLflow UI",
@@ -315,7 +315,7 @@
 				"label": "Training fold model",
 				"description": "Training a model for each fold during the cross-validation process.",
 				"file": "pipelines/training.py",
-				"markdown": ".guide/training-pipeline/train-fold.md",
+				"markdown": ".guide/training-pipeline/training-fold-model.md",
 				"actions": [
 					{
 						"label": "Open model implementation",
@@ -589,12 +589,21 @@
 	{
 		"label": "Amazon Web Services",
 		"description": "Running the system on an Amazon Web Services (AWS) account.",
-		"file": "cloud-formation/mlschool-cfn.yaml",
+		"file": "scripts/aws.py",
 		"markdown": ".guide/aws/introduction.md",
 		"actions": [
 			{
-				"label": "List S3 buckets",
-				"target": "aws s3 ls"
+				"label": "Setup AWS resources",
+				"target": "just aws-setup mlschool-user"
+			},
+			{
+				"label": "Clean up AWS resources",
+				"target": "just aws-teardown"
+			},
+			{
+				"label": "Open CloudFormation template",
+				"action": "file",
+				"target": "cloud-formation/mlschool-cfn.yaml"
 			}
 		],
 		"lessons":[
@@ -676,8 +685,20 @@
 				"markdown": ".guide/aws/cleaning-up.md",
 				"actions": [
 					{
+						"label": "Delete MLflow stack",
+						"target": "aws cloudformation delete-stack --stack-name mlflow"
+					},
+					{
+						"label": "Delete Metaflow stack",
+						"target": "aws cloudformation delete-stack --stack-name metaflow"
+					},
+					{
 						"label": "Delete Sagemaker endpoint",
 						"target": "just sagemaker-delete"
+					},
+					{
+						"label": "Clean up AWS resources",
+						"target": "just aws-teardown"
 					}
 				]
 			}

@@ -43,6 +43,7 @@ test:
 [group('training')]
 @train:
     uv run -- python pipelines/training.py \
+        --with retry \
         --environment conda run
 
 # Run training pipeline card server 
@@ -97,6 +98,22 @@ test:
     uv run -- python pipelines/monitoring.py \
         --environment conda card server \
         --port 8334
+
+
+# Set up your AWS account using and configure your local environment.
+[group('aws')]
+@aws-setup user region='us-east-1':
+    uv run -- python scripts/aws.py setup \
+        --stack-name mlschool \
+        --region {{region}} \
+        --user {{user}}
+
+# Delete the CloudFormation stack and clean up AWS configuration.
+[group('aws')]
+@aws-teardown region='us-east-1':
+    uv run -- python scripts/aws.py teardown \
+        --stack-name mlschool \
+        --region {{region}}
 
 
 # Deploy MLflow Cloud Formation stack
@@ -226,3 +243,5 @@ test:
     METAFLOW_PROFILE=production uv run -- python pipelines/deployment.py \
         --environment conda step-functions trigger \
         --backend backend.Sagemaker
+
+

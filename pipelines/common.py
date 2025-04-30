@@ -18,6 +18,23 @@ PACKAGES = {
 }
 
 
+class Pipeline:
+    """A base class for all pipelines."""
+
+    def configure_logging(self) -> logging.Logger:
+        """Configure the logging handler and return a logger instance."""
+        if Path("logging.conf").exists():
+            logging.config.fileConfig("logging.conf")
+        else:
+            logging.basicConfig(
+                format="%(asctime)s [%(levelname)s] %(message)s",
+                handlers=[logging.StreamHandler(sys.stdout)],
+                level=logging.INFO,
+            )
+
+        return logging.getLogger("mlschool")
+
+
 class DatasetMixin:
     """A mixin for loading and preparing a dataset.
 
@@ -32,16 +49,29 @@ class DatasetMixin:
         default="data/penguins.csv",
     )
 
-    def load_dataset(self):
-        """Load and prepare the dataset."""
+    def load_dataset(self, logger=None):
+        """Load and prepare the dataset.
+
+        This method loads the dataset, cleans the sex column by replacing extraneous values with NaN,
+        drops any rows with missing values, and then shuffles the dataset.
+        """
         import numpy as np
 
         # The raw data is passed as a string, so we need to convert it into a DataFrame.
         data = pd.read_csv(StringIO(self.dataset))
 
-        # Replace extraneous values in the sex column with NaN. We can handle missing
-        # values later in the pipeline.
+        # Replace extraneous values in the sex column with NaN
         data["sex"] = data["sex"].replace(".", np.nan)
+
+        # Drop rows with missing values
+        row_count_before = len(data)
+        data = data.dropna()
+        if logger:
+            logger.info("Dropped %d rows with missing values",
+                        row_count_before - len(data))
+        else:
+            logging.info("Dropped %d rows with missing values",
+                         row_count_before - len(data))
 
         # We want to shuffle the dataset. For reproducibility, we can fix the seed value
         # when running in development mode. When running in production mode, we can use
@@ -51,7 +81,8 @@ class DatasetMixin:
         generator = np.random.default_rng(seed=seed)
         data = data.sample(frac=1, random_state=generator)
 
-        logging.info("Loaded dataset with %d samples", len(data))
+        if logger:
+            logger.info("Loaded dataset with %d samples", len(data))
 
         return data
 
@@ -67,18 +98,6 @@ def packages(*names: str):
     installed using the latest version available.
     """
     return {name: PACKAGES.get(name, "") for name in names}
-
-
-def configure_logging():
-    """Configure logging handlers and return a logger instance."""
-    if Path("logging.conf").exists():
-        logging.config.fileConfig("logging.conf")
-    else:
-        logging.basicConfig(
-            format="%(asctime)s [%(levelname)s] %(message)s",
-            handlers=[logging.StreamHandler(sys.stdout)],
-            level=logging.INFO,
-        )
 
 
 def build_features_transformer():

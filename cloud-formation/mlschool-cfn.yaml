@@ -22,6 +22,7 @@ Resources:
     Type: AWS::SecretsManager::Secret
     Properties:
       Name: '/credentials/mlschool'
+      Description: 'Access credentials for the Machine Learning School user'
       SecretString: !GetAtt UserCredentials.SecretAccessKey
 
   Role:
@@ -182,7 +183,7 @@ Resources:
                   - "states:StopExecution"
                 Resource:
                   - !Sub 'arn:aws:states:${AWS::Region}:${AWS::AccountId}:stateMachine:*'
-
+              
               - Effect: "Allow"
                 Sid: "S3"
                 Action:
@@ -195,12 +196,27 @@ Resources:
                   - "s3:GetObject"
                   - "s3:DeleteObject"
                 Resource:
-                  - !Sub "arn:aws:s3:::*"
+                  - "arn:aws:s3:::*"
 
+  # Create an S3 bucket with a unique name using the stack UUID suffix.
   Bucket:
     Type: 'AWS::S3::Bucket'
     Properties:
-      BucketName: !Sub 'mlschool-${AWS::AccountId}'
+      BucketName: !Join 
+        - '-'
+        - - 'mlschool'
+          - !Select [2, !Split ['/', !Ref AWS::StackId]]
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: AES256
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+      VersioningConfiguration:
+        Status: Enabled
 
   UserPolicy:
     Type: 'AWS::IAM::Policy'
